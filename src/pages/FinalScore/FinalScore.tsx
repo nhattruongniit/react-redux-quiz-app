@@ -4,10 +4,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm, Controller, SubmitHandler } from "react-hook-form"
+import TextField from "@mui/material/TextField/TextField";
+
+import { updateLeaderboard } from "../../redux/leaderboard.action";
 import { IRootState } from "../../types/root";
 import { resetScore } from "../../redux/question.action";
-import TextField from "@mui/material/TextField/TextField";
-import { useForm, Controller, SubmitHandler } from "react-hook-form"
 
 interface IFormInput {
   first_name: string
@@ -34,16 +36,20 @@ const FinalScore = () => {
   })
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data);
-    // TODO: save data to leaderboard
-    
-    // TODO: navigate to leader board
+    const { first_name, last_name, email } = data;
+    const item = {
+      id: Date.now(),
+      first_name,
+      last_name,
+      email,
+      score
+    }
+    dispatch(updateLeaderboard(item))
+    setTimeout(() => {
+      dispatch(resetScore());
+      navigate("/leader-board");
+    })
   }
-
-  // const handleSubmit = () => {
-  //   dispatch(resetScore());
-  //   // navigate("/leader-board");
-  // };
 
   return (
     <Container maxWidth='md'>
