@@ -40,7 +40,7 @@ const Question = () => {
       .then((res) => res.json())
       .then((data) => {
         const questions = data.results[questionIndex];
-        let answers = [...questions.incorrect_answers];
+        const answers = [...questions.incorrect_answers];
 
         answers.splice(
           Math.floor(Math.random() * 4),
@@ -50,13 +50,14 @@ const Question = () => {
         setOptions(answers);
         setDataSource(data.results);
       });
-  }, [paramsQuestion]);
+    /* eslint-disable */
+  }, [ category, type, difficulty, amount]);
 
   // next question
   useEffect(() => {
     if (questionIndex > 0) {
       const questions = dataSource[questionIndex];
-      let answers = [...(questions?.incorrect_answers || [])];
+      const answers = [...(questions?.incorrect_answers || [])];
 
       answers.splice(
         Math.floor(Math.random() * 4),
@@ -65,7 +66,7 @@ const Question = () => {
       );
       setOptions(answers);
     }
-  }, [questionIndex]);
+  }, [dataSource, questionIndex]);
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -83,6 +84,7 @@ const Question = () => {
     return () => {
       clearInterval(timer);
     }
+    /* eslint-disable */
   }, [options])
 
   const handleAnswer = (content: string) => {
